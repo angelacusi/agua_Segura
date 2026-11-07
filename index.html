@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b2942">
+  <meta name="description" content="Simulación educativa de la autonomía de un tanque comunitario mediante una ecuación diferencial y métodos numéricos.">
+  <title>AGUA SEGURA | Simulación de un tanque comunitario</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#inicio" aria-label="AGUA SEGURA, ir al inicio">
+      <span class="brand-mark" aria-hidden="true">≈</span>
+      <span>AGUA <strong>SEGURA</strong></span>
+    </a>
+    <nav aria-label="Navegación principal">
+      <a href="#inicio">Inicio</a>
+      <a href="#desafio">El desafío</a>
+      <a href="#modelo">Modelo matemático</a>
+      <a href="#simulacion">Simulación y conclusiones</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="hero-content">
+        <p class="eyebrow"><span class="eyebrow-dot"></span> PROYECTO DE MÉTODOS NUMÉRICOS</p>
+        <h1>AGUA<br><span>SEGURA</span></h1>
+        <p class="hero-subtitle">Simulación matemática de la autonomía de un tanque comunitario.</p>
+        <p class="hero-question">¿Cuánto tiempo puede abastecer un tanque de 500 litros antes de alcanzar su reserva mínima?</p>
+        <a class="button button-primary" href="#simulacion">Explorar simulación <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="hero-art" role="img" aria-label="Ilustración de un tanque de agua con nivel y reserva señalados">
+        <div class="sun-glow"></div>
+        <div class="hero-drop drop-one"></div>
+        <div class="hero-drop drop-two"></div>
+        <div class="tank-illustration">
+          <div class="tank-cap"></div>
+          <div class="tank-body">
+            <div class="tank-water"></div>
+            <span class="tank-reserve-line"></span>
+            <span class="tank-measure measure-one">500 L</span>
+            <span class="tank-measure measure-two">100 L · reserva</span>
+          </div>
+          <div class="tank-base"></div>
+          <div class="tank-outlet"></div>
+        </div>
+        <div class="art-caption"><span class="caption-icon">↘</span> Un modelo para planificar mejor el agua</div>
+      </div>
+      <div class="hero-wave" aria-hidden="true"></div>
+    </section>
+
+    <section class="section challenge-section" id="desafio">
+      <div class="section-heading">
+        <p class="eyebrow">01 · EL DESAFÍO</p>
+        <h2>Una pregunta importante<br>para la comunidad.</h2>
+        <p class="section-intro">Estimar la autonomía de un tanque ayuda a entender sus reservas y a tomar decisiones informadas sobre el uso del agua.</p>
+      </div>
+      <div class="challenge-grid">
+        <article class="info-card">
+          <span class="card-icon" aria-hidden="true">◎</span>
+          <h3>¿A quién beneficia?</h3>
+          <p>Familias de comunidades que dependen de tanques de almacenamiento de agua.</p>
+        </article>
+        <article class="info-card">
+          <span class="card-icon" aria-hidden="true">⌁</span>
+          <h3>El problema</h3>
+          <p>Se necesita conocer cuánto tiempo hay agua disponible antes de llegar al nivel mínimo de reserva.</p>
+        </article>
+        <article class="info-card">
+          <span class="card-icon" aria-hidden="true">◷</span>
+          <h3>El objetivo</h3>
+          <p>Determinar el tiempo para pasar de 500 a 100 litros y comparar una solución analítica con Heun y RK4.</p>
+        </article>
+      </div>
+      <div class="question-banner">
+        <span class="question-mark">?</span>
+        <div><span class="mini-label">PREGUNTA DEL DESAFÍO</span><p>¿Cuánto tiempo puede abastecer un tanque comunitario de 500 litros antes de alcanzar una reserva mínima de 100 litros, si el caudal disminuye con el nivel del agua?</p></div>
+      </div>
+    </section>
+
+    <section class="section model-section" id="modelo">
+      <div class="section-heading">
+        <p class="eyebrow">02 · MODELO MATEMÁTICO</p>
+        <h2>Describimos cómo<br>cambia el volumen.</h2>
+        <p class="section-intro">Una ecuación diferencial relaciona el agua que queda con la rapidez con que sale del tanque.</p>
+      </div>
+      <div class="equation-card">
+        <span class="mini-label">ECUACIÓN DIFERENCIAL ORDINARIA · PRIMER ORDEN · NO LINEAL</span>
+        <div class="main-equation">dV/dt = −k√V</div>
+        <p>El volumen disminuye con el tiempo. Al quedar menos agua, también disminuye la velocidad de salida.</p>
+      </div>
+      <div class="model-columns">
+        <div class="model-panel">
+          <h3>Variables y parámetros</h3>
+          <div class="table-scroll">
+            <table class="parameter-table">
+              <tbody>
+                <tr><th>V(t)</th><td>Volumen de agua en el instante <i>t</i> (L).</td></tr>
+                <tr><th>t</th><td>Tiempo transcurrido (min).</td></tr>
+                <tr><th>k</th><td>Constante de descarga (√L/min).</td></tr>
+                <tr><th>V₀</th><td>Volumen inicial (L).</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="small-note">Los parámetros predeterminados son hipotéticos y se usan únicamente para la simulación académica.</p>
+          <h3 class="subheading">Supuestos del modelo</h3>
+          <ul class="assumption-list">
+            <li>Tanque de sección transversal constante.</li>
+            <li>Salida por gravedad a través de una abertura inferior.</li>
+            <li>Sin ingreso de agua, evaporación ni fugas adicionales.</li>
+            <li>La constante <i>k</i> permanece fija; es una aproximación simplificada.</li>
+          </ul>
+        </div>
+        <div class="model-panel derivation-panel">
+          <h3>Solución analítica</h3>
+          <p class="panel-lead">Separamos variables e integramos:</p>
+          <div class="math-steps">
+            <div><span>Separación</span><code>dV/√V = −k dt</code></div>
+            <div><span>Integración</span><code>2√V = −kt + C</code></div>
+            <div><span>Condición inicial</span><code>V(0) = V₀  ⇒  C = 2√V₀</code></div>
+            <div class="solution-step"><span>Solución</span><code>V(t) = (√V₀ − kt/2)²</code></div>
+          </div>
+          <p class="parameterized-solution"><span>Con los parámetros actuales:</span> <code id="analytic-expression">V(t) = (√500 − 0,01t)²</code></p>
+          <div class="substitution-check">
+            <h4>Comprobación por sustitución</h4>
+            <p>Para <i>t</i> antes del vaciado, <b>V′(t) = −k(√V₀ − kt/2) = −k√V(t)</b>. Además, <b>V(0) = (√V₀)² = V₀</b>. La fórmula se limita a cero desde el instante de vaciado.</p>
+          </div>
+          <div class="reference-result">
+            <span class="mini-label">TIEMPO ANALÍTICO HASTA LA RESERVA</span>
+            <div><strong id="analytic-time-model">—</strong><span id="analytic-hours-model">—</span></div>
+            <code>t = 2(√V₀ − √R) / k</code>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="simulation-section" id="simulacion">
+      <div class="section section-heading simulation-heading">
+        <p class="eyebrow">03 · SIMULACIÓN Y ANÁLISIS</p>
+        <h2>Experimenta con los parámetros.</h2>
+        <p class="section-intro">Cambia los valores y ejecuta la simulación para comparar el modelo exacto con dos métodos numéricos.</p>
+      </div>
+      <div class="section simulation-content">
+        <form class="config-panel" id="simulation-form" novalidate>
+          <div class="config-heading">
+            <div><span class="mini-label">PANEL DE CONFIGURACIÓN</span><h3>Parámetros del tanque</h3></div>
+            <span class="settings-icon" aria-hidden="true">☷</span>
+          </div>
+          <div class="form-grid">
+            <label>Volumen inicial V₀ <span>(L)</span><input id="volume-input" type="number" min="0.000001" step="any" value="500" required></label>
+            <label>Constante k <span>(√L/min)</span><input id="k-input" type="number" min="0.000001" step="any" value="0.02" required></label>
+            <label>Reserva mínima <span>(L)</span><input id="reserve-input" type="number" min="0" step="any" value="100" required></label>
+            <label>Tiempo final <span>(min)</span><input id="end-time-input" type="number" min="0.000001" step="any" value="1300" required></label>
+            <label>Tamaño de paso · experimento 1 <span>h (min)</span><input id="step-one-input" type="number" min="0.000001" step="any" value="50" required></label>
+            <label>Tamaño de paso · experimento 2 <span>h (min)</span><input id="step-two-input" type="number" min="0.000001" step="any" value="25" required></label>
+          </div>
+          <div id="validation-message" class="validation-message" role="alert" hidden></div>
+          <div class="form-actions">
+            <button class="button button-primary" type="submit">Ejecutar simulación <span aria-hidden="true">→</span></button>
+            <button class="button button-secondary" type="reset">Restablecer valores</button>
+          </div>
+          <p class="step-limit-note">Para conservar una respuesta fluida, cada experimento admite hasta 20&nbsp;000 pasos.</p>
+        </form>
+
+        <div class="method-cards">
+          <article class="method-card heun-card">
+            <span class="method-tag">ORDEN 2</span><h3>Método de Heun</h3>
+            <p>Usa una pendiente al inicio y otra al final del paso; su promedio mejora la aproximación de Euler.</p>
+            <div class="method-formula">k₁ = f(tₙ, Vₙ)<br>k₂ = f(tₙ+h, Vₙ+h·k₁)<br><b>Vₙ₊₁ = Vₙ + h(k₁+k₂)/2</b></div>
+          </article>
+          <article class="method-card rk-card">
+            <span class="method-tag">ORDEN 4</span><h3>Runge–Kutta clásico (RK4)</h3>
+            <p>Combina cuatro pendientes: al inicio, en dos puntos medios y al final del paso.</p>
+            <div class="method-formula">k₁ = f(tₙ,Vₙ), k₂ = f(tₙ+h/2,Vₙ+hk₁/2)<br>k₃ = f(tₙ+h/2,Vₙ+hk₂/2), k₄ = f(tₙ+h,Vₙ+hk₃)<br><b>Vₙ₊₁ = Vₙ + h(k₁+2k₂+2k₃+k₄)/6</b></div>
+          </article>
+        </div>
+        <p class="method-note"><b>Nota:</b> la ecuación diferencial es de primer orden; los órdenes 2 y 4 corresponden a los métodos numéricos.</p>
+
+        <div class="experiment-guide">
+          <div class="experiment-definition">
+            <span class="mini-label">ANTES DE COMPARAR</span>
+            <p><strong>h es el tamaño de paso:</strong> indica cada cuántos minutos se calcula una nueva aproximación del volumen.</p>
+            <p>En ambos experimentos se mantienen los mismos parámetros y la misma condición inicial; solo cambia el tamaño de paso.</p>
+          </div>
+          <div class="experiment-options">
+            <article class="experiment-option"><span>EXPERIMENTO 1</span><strong>h = <b id="experiment-one-step">50</b> min</strong><small>Heun y RK4</small></article>
+            <article class="experiment-option"><span>EXPERIMENTO 2</span><strong>h = <b id="experiment-two-step">25</b> min</strong><small>Heun y RK4</small></article>
+          </div>
+        </div>
+
+        <div class="results-heading">
+          <div><span class="mini-label">RESULTADO PRINCIPAL</span><h3>¿Cuánto dura el agua hasta la reserva?</h3></div>
+          <span class="results-chip" id="run-status">Parámetros predeterminados</span>
+        </div>
+        <div class="primary-results">
+          <div class="primary-metrics">
+            <article class="primary-metric exact-metric"><span>Tiempo analítico · exacto</span><strong id="metric-exact-time">—</strong><small>Tiempo calculado por la solución del modelo.</small></article>
+            <article class="primary-metric heun-metric"><span id="primary-heun-label">Heun · h = 50 min</span><strong id="metric-heun-time">—</strong><small id="metric-heun-delta">aproximación numérica</small></article>
+            <article class="primary-metric rk-metric"><span id="primary-rk-label">RK4 · h = 50 min</span><strong id="metric-rk-time">—</strong><small id="metric-rk-delta">aproximación numérica</small></article>
+          </div>
+          <p class="primary-explanation">El tiempo analítico es la referencia exacta del modelo. Heun y RK4 estiman cuándo se cruza la reserva, con interpolación dentro del paso; el error indicado compara cada estimación con esa referencia.</p>
+        </div>
+
+        <section class="step-comparison" aria-labelledby="step-comparison-title">
+          <div class="comparison-heading">
+            <div><span class="mini-label">COMPARACIÓN DE EXPERIMENTOS</span><h3 id="step-comparison-title">¿Qué sucede al reducir el paso?</h3></div>
+            <p>Se comparan los tiempos de llegada a la reserva y su error temporal absoluto respecto al valor analítico.</p>
+          </div>
+          <div class="step-comparison-wrap">
+            <table class="step-comparison-table">
+              <thead><tr><th>Método</th><th id="step-one-heading">h = 50 min</th><th id="step-two-heading">h = 25 min</th></tr></thead>
+              <tbody>
+                <tr><th scope="row"><span class="method-key heun-key"></span>Heun</th><td><strong id="comparison-heun-one">—</strong><small id="comparison-heun-one-error">Error: —</small></td><td><strong id="comparison-heun-two">—</strong><small id="comparison-heun-two-error">Error: —</small></td></tr>
+                <tr><th scope="row"><span class="method-key rk-key"></span>RK4</th><td><strong id="comparison-rk-one">—</strong><small id="comparison-rk-one-error">Error: —</small></td><td><strong id="comparison-rk-two">—</strong><small id="comparison-rk-two-error">Error: —</small></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="step-explanation" id="step-explanation">Un paso menor implica más cálculos y generalmente mejora la aproximación. La comparación muestra el efecto para los parámetros seleccionados.</p>
+        </section>
+
+        <div class="tank-results">
+          <div class="tank-card">
+            <div class="tank-card-heading"><div><span class="mini-label">NIVEL AL FINAL DE LA SIMULACIÓN</span><h3>Disponibilidad de agua</h3></div><span class="droplet-icon" aria-hidden="true">◆</span></div>
+            <div class="tank-readout"><strong id="tank-liters">—</strong><span id="tank-percent">—</span><span class="tank-status" id="tank-status">Agua disponible</span></div>
+            <div class="gauge-layout">
+              <div class="gauge-tank" role="img" aria-label="Tanque con nivel de agua, zona de reserva y marca de reserva mínima">
+                <div class="gauge-water" id="gauge-water"></div>
+                <div class="gauge-reserve-zone" id="gauge-reserve-zone"></div>
+                <div class="gauge-reserve-line" id="gauge-reserve-line"></div>
+              </div>
+              <div class="gauge-scale"><span id="gauge-top-label">—</span><span class="reserve-label" id="gauge-reserve-label">Reserva mínima: —</span><span>0 L</span></div>
+            </div>
+            <div class="gauge-legend"><span><i class="water-key"></i>Agua disponible</span><span><i class="reserve-key"></i>Nivel de reserva</span><span><i class="alert-key"></i>Alerta bajo la reserva</span></div>
+            <p class="gauge-caption" id="gauge-caption">Nivel calculado con RK4 y el paso del experimento 2.</p>
+          </div>
+          <div class="tank-summary">
+            <article class="metric-card"><span>Volumen inicial</span><strong id="metric-initial">—</strong><small>condición inicial V(0)</small></article>
+            <article class="metric-card"><span>Volumen al final</span><strong id="metric-final">—</strong><small id="metric-final-time">al final de la simulación</small></article>
+          </div>
+        </div>
+
+        <section class="detailed-analysis" aria-labelledby="detailed-analysis-title">
+          <div class="detailed-heading"><span class="mini-label">TERCERO · ANÁLISIS DETALLADO</span><h3 id="detailed-analysis-title">Gráfica, iteraciones y errores</h3><p>Explora cómo evolucionan las soluciones y consulta cada cálculo.</p></div>
+          <div class="chart-panel">
+          <div class="panel-heading"><div><span class="mini-label">COMPARACIÓN DE SOLUCIONES</span><h3>Volumen de agua a lo largo del tiempo</h3></div><span class="chart-unit">Volumen (L)</span></div>
+          <div class="chart-wrap" id="chart-container"><svg id="comparison-chart" viewBox="0 0 1000 460" role="img" aria-label="Gráfica comparativa del volumen de agua"></svg></div>
+          <div class="chart-legend" id="chart-legend"></div>
+          <p class="chart-x-label">Tiempo (min)</p>
+          </div>
+
+          <div class="tables-heading">
+          <div><span class="mini-label">DATOS E ITERACIONES</span><h3>Tablas comparativas</h3></div>
+            <p>Los errores se calculan con valores sin redondear. Si la solución exacta es cero, el error relativo no está definido.</p>
+          </div>
+          <div class="comparison-tables" id="comparison-tables"></div>
+          <div class="interpretation-panel" id="interpretation">
+            <div class="interpretation-title"><span class="conclusion-icon" aria-hidden="true">✦</span><div><span class="mini-label">LECTURA DE LOS RESULTADOS</span><h3>¿Qué nos dice la simulación?</h3></div></div>
+            <div class="interpretation-grid" id="interpretation-content"></div>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <a class="brand footer-brand" href="#inicio"><span class="brand-mark" aria-hidden="true">≈</span><span>AGUA <strong>SEGURA</strong></span></a>
+    <p>Un ejercicio académico de ecuaciones diferenciales y métodos numéricos.</p>
+    <a href="#inicio" class="back-to-top">Volver arriba ↑</a>
+  </footer>
+</body>
+</html>
